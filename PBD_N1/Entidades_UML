@@ -1,0 +1,99 @@
+@startuml
+!define ENTITYMODIFIER abstract
+!define MAXENTITYWIDTH 150
+
+hide empty members
+
+entity Pessoa {
+  * id_pessoa int <<PK>>
+  * nome string
+  * endereco string
+  * telefone string
+}
+
+entity PessoaFisica {
+  * id_pessoa int <<PK, FK>>
+  * cpf string <<PK>>
+  * rg string
+}
+
+entity PessoaJuridica {
+  * id_pessoa int <<PK, FK>>
+  * nome_fantasia string
+  * cnpj string <<PK>>
+  * responsavel string
+}
+
+entity Funcionario {
+  * id_pessoa int <<PK, FK>>
+  * cpf string <<PK>>
+  * rg string
+  * nome string
+  * endereco string
+  * telefone string
+}
+
+entity LocalHospedagem {
+  * id_local int <<PK>>
+  * nome string
+  * endereco string
+  * telefone string
+}
+
+entity Quarto {
+  * id_quarto int <<PK>>
+  * nome string
+  * num_camas int
+  * preco_diaria float
+  * id_local int <<FK>>
+}
+
+entity Reserva {
+  * id_reserva int <<PK>>
+  * data_inicio date
+  * data_fim date
+  * qtd_hospedes int
+  * id_pessoa int <<FK>>
+  * id_quarto int <<FK>>
+}
+
+entity Hospedagem {
+  * id_hospedagem int <<PK>>
+  * data_inicio date
+  * data_fim date
+  * valor_total float
+  * id_reserva int <<FK>>
+  * id_pessoa int <<FK>>
+  * id_quarto int <<FK>>
+}
+
+entity Agendamento {
+  * id_agendamento int <<PK>>
+  * data_agendamento date
+  * hora_agendamento time
+  * id_hospedagem int <<FK>>
+}
+
+entity Servico {
+  * id_servico int <<PK>>
+  * descricao string
+  * preco float
+  * id_local int <<FK>>
+}
+
+Pessoa --|> PessoaFisica
+Pessoa --|> PessoaJuridica
+Pessoa --|> Funcionario
+LocalHospedagem -- Quarto
+LocalHospedagem -- Servico
+Quarto -- Reserva
+PessoaFisica -- Reserva
+PessoaJuridica -- Reserva
+Reserva -- Hospedagem
+Reserva -- Quarto
+Hospedagem -- Agendamento
+Agendamento -- Servico
+Hospedagem -- Quarto
+Hospedagem -- PessoaFisica
+Hospedagem -- Reserva
+@enduml
